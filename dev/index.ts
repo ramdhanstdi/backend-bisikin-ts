@@ -3,9 +3,9 @@ import dotenv from "dotenv";
 import cors from "cors"
 
 dotenv.config();
-const port = process.env.PORT
-const app: Express = express()
-const test:String = "sting"
+const port = process.env.PORT;
+const app: Express = express();
+const test:String = "sting";
 
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
