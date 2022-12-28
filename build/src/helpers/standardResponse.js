@@ -1,22 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.response = void 0;
-const response = (res, msg, result, pageInfo, status = 200) => {
-    const data = {
-        success: true,
-        message: msg,
-        pageInfo,
-        result,
-    };
-    if (status >= 400) {
-        data.success = false;
+class SuccessRes {
+    constructor(res, msg, results, pageInfo, status = 200) {
+        this.res = res;
+        this.msg = msg;
+        this.results = results;
+        this.pageInfo = pageInfo;
+        this.status = status;
     }
-    if (pageInfo) {
-        data.pageInfo = pageInfo;
+    response() {
+        const data = {
+            success: true,
+            msg: this.msg,
+            results: this.results,
+            pageInfo: this.pageInfo,
+        };
+        if (this.status >= 400) {
+            data.success = false;
+        }
+        return this.res.status(this.status).json(data);
     }
-    if (result) {
-        data.result = result;
-    }
-    return res.status(status).json(data);
-};
-exports.response = response;
+}
+exports.default = SuccessRes;

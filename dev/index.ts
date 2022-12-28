@@ -29,7 +29,7 @@ class App {
         message: "server running well",
       });
     });
-    this.app.use("/", IndexRoute);
+    this.app.use("/api", IndexRoute);
   }
 }
 

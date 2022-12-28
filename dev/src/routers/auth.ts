@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 import IRouter from "./routeInterface";
-
+import AuthController from "../controller/authController";
 class AuthRouter implements IRouter {
   public router: Router;
 
@@ -9,12 +9,9 @@ class AuthRouter implements IRouter {
     this.routes();
   }
   public routes(): void {
-    this.router.post("/login", (req: Request, res: Response) => {
-      res.json({
-        success: true,
-        data: req.body,
-      });
-    });
+    this.router.post("/login", AuthController.get);
+    this.router.post("/register", AuthController.create);
+    this.router.delete("/delete", AuthController.delete);
   }
 }
 

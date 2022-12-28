@@ -11,7 +11,7 @@ class IndexRoute {
         this.routes();
     }
     routes() {
-        this.router.use("/", auth_1.default);
+        this.router.use("/v1/", auth_1.default);
     }
 }
 exports.default = new IndexRoute().router;

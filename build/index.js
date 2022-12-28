@@ -30,7 +30,7 @@ class App {
                 message: "server running well",
             });
         });
-        this.app.use("/", routers_1.default);
+        this.app.use("/api", routers_1.default);
     }
 }
 dotenv_1.default.config();

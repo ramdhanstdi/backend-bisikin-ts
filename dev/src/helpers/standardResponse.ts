@@ -1,37 +1,38 @@
 import { Response } from "express";
 
-export const response = (
-  res: Response,
-  msg: string,
-  result: any,
-  pageInfo: object,
-  status: number = 200
-) => {
-  interface Data {
-    success: boolean;
-    message: string;
-    pageInfo: object;
-    result: any;
+class SuccessRes {
+  res: Response;
+  msg: string;
+  results: any;
+  pageInfo: object | null;
+  status: number;
+
+  constructor(
+    res: Response,
+    msg: string,
+    results: any,
+    pageInfo: object | null,
+    status: number = 200
+  ) {
+    this.res = res;
+    this.msg = msg;
+    this.results = results;
+    this.pageInfo = pageInfo;
+    this.status = status;
   }
 
-  const data: Data = {
-    success: true,
-    message: msg,
-    pageInfo,
-    result,
-  };
-
-  if (status >= 400) {
-    data.success = false;
+  public response() {
+    const data = {
+      success: true,
+      msg: this.msg,
+      results: this.results,
+      pageInfo: this.pageInfo,
+    };
+    if (this.status >= 400) {
+      data.success = false;
+    }
+    return this.res.status(this.status).json(data);
   }
+}
 
-  if (pageInfo) {
-    data.pageInfo = pageInfo;
-  }
-
-  if (result) {
-    data.result = result;
-  }
-
-  return res.status(status).json(data);
-};
+export default SuccessRes;

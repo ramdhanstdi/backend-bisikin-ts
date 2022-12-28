@@ -9,7 +9,7 @@ class IndexRoute implements IRouter {
   }
 
   public routes(): void {
-    this.router.use("/", AuthRouter);
+    this.router.use("/v1/", AuthRouter);
   }
 }
 export default new IndexRoute().router;
