@@ -1,6 +1,6 @@
 import { Response } from "express";
 
-const response = (
+export const response = (
   res: Response,
   msg: string,
   result: any,

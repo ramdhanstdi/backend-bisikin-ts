@@ -1,5 +1,15 @@
 import { Router } from "express";
+import IRouter from "./routeInterface";
+import AuthRouter from "./auth";
+class IndexRoute implements IRouter {
+  public router: Router;
+  constructor() {
+    this.router = Router();
+    this.routes();
+  }
 
-const router = Router();
-
-router.use("/", require("./auth"))
+  public routes(): void {
+    this.router.use("/", AuthRouter);
+  }
+}
+export default new IndexRoute().router;

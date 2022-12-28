@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.response = void 0;
 const response = (res, msg, result, pageInfo, status = 200) => {
     const data = {
         success: true,
@@ -18,3 +19,4 @@ const response = (res, msg, result, pageInfo, status = 200) => {
     }
     return res.status(status).json(data);
 };
+exports.response = response;
