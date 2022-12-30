@@ -4,17 +4,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const dotenv_1 = __importDefault(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
 const morgan_1 = __importDefault(require("morgan"));
 const compression_1 = __importDefault(require("compression"));
 const helmet_1 = __importDefault(require("helmet"));
 const routers_1 = __importDefault(require("./src/routers"));
+const dotenv_1 = require("dotenv");
 class App {
     constructor() {
         this.app = (0, express_1.default)();
         this.plugin();
         this.routes();
+        (0, dotenv_1.config)();
     }
     plugin() {
         this.app.use((0, cors_1.default)());
@@ -33,9 +34,7 @@ class App {
         this.app.use("/api", routers_1.default);
     }
 }
-dotenv_1.default.config();
-const port = process.env.PORT;
 const app = new App().app;
-app.listen(port, () => {
-    console.log(`App Run in Port ${port}`);
+app.listen(() => {
+    console.log(`App Run in Port ${process.env.PORT}`);
 });

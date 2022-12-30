@@ -1,13 +1,7 @@
 import { Router } from "express";
-import IRouter from "./routeInterface";
 import AuthRouter from "./auth";
-class IndexRoute implements IRouter {
-  public router: Router;
-  constructor() {
-    this.router = Router();
-    this.routes();
-  }
-
+import BaseRoute from "./baseRoutes";
+class IndexRoute extends BaseRoute {
   public routes(): void {
     this.router.use("/v1/", AuthRouter);
   }

@@ -1,10 +1,10 @@
 import express, { Application, Request, Response } from "express";
-import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
 import compression from "compression";
 import helmet from "helmet";
 import IndexRoute from "./src/routers";
+import { config as dotenv } from "dotenv";
 class App {
   public app: Application;
 
@@ -12,6 +12,7 @@ class App {
     this.app = express();
     this.plugin();
     this.routes();
+    dotenv();
   }
 
   protected plugin(): void {
@@ -33,10 +34,8 @@ class App {
   }
 }
 
-dotenv.config();
-const port = process.env.PORT;
 const app = new App().app;
 
-app.listen(port, () => {
-  console.log(`App Run in Port ${port}`);
+app.listen(() => {
+  console.log(`App Run in Port ${process.env.PORT}`);
 });
