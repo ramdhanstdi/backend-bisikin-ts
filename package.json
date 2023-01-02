@@ -4,8 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "tsc": "rm -rf build/ && tsc",
-    "ts": "rm -rd build/ && tsc -w",
+    "tsc": "build/ && tsc",
+    "ts": "tsc -w & nodemon app.js",
     "dev": "nodemon ./build/index.js"
   },
   "devDependencies": {

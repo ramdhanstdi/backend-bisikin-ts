@@ -35,6 +35,7 @@ class App {
     }
 }
 const app = new App().app;
-app.listen(() => {
-    console.log(`App Run in Port ${process.env.PORT}`);
+const port = process.env.PORT;
+app.listen(port, () => {
+    console.log(`App Run in Port ${port}`);
 });
