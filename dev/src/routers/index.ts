@@ -1,5 +1,5 @@
 import { Router } from "express";
-import AuthRouter from "./auth";
+import AuthRouter from "./authRoutes";
 import BaseRoute from "./baseRoutes";
 class IndexRoute extends BaseRoute {
   public routes(): void {

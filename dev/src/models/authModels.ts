@@ -12,12 +12,11 @@ export const register = async (data: any): Promise<object> => {
     const profile = await prisma.profile.create({
       data: { user_id: user.id, username: user.username, email: user.email },
     });
-    console.log(profile);
 
     results.success = profile;
-    return results.success;
+    return results;
   } catch (error: any) {
     results.error = error;
-    return error;
+    return results;
   }
 };

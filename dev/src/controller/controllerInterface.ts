@@ -1,11 +1,9 @@
 import { Request, Response } from "express";
+import { type } from "os";
 
-interface IController {
-  get(req: Request, res: Response): Response;
-  detail(req: Request, res: Response): Response;
-  create(req: Request, res: Response): Response;
-  update(req: Request, res: Response): Response;
-  delete(req: Request, res: Response): Response;
-}
+type TController = {
+  success: object;
+  error: object;
+};
 
-export default IController;
+export default TController;

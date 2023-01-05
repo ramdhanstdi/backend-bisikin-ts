@@ -1,16 +1,16 @@
 import { Response } from "express";
 
-class SuccessRes {
+abstract class StandarResponse {
   res: Response;
-  msg: string;
   results: any;
+  msg: string | null;
   pageInfo: object | null;
   status: number;
 
   constructor(
     res: Response,
-    msg: string,
     results: any,
+    msg: string | null,
     pageInfo: object | null,
     status: number = 200
   ) {
@@ -21,6 +21,10 @@ class SuccessRes {
     this.status = status;
   }
 
+  abstract response(): void;
+}
+
+export class SuccessRes extends StandarResponse {
   public response() {
     const data = {
       success: true,
@@ -35,4 +39,24 @@ class SuccessRes {
   }
 }
 
-export default SuccessRes;
+export class ErrorRes extends StandarResponse {
+  public response() {
+    const data = {
+      success: false,
+      msg: this.msg,
+    };
+    if (
+      this.results.code === "P2002" &&
+      this.results.meta.target[0] === "email"
+    ) {
+      data.msg = "Email already registered";
+    }
+    if (
+      this.results.code === "P2002" &&
+      this.results.meta.target[0] === "username"
+    ) {
+      data.msg = "Username already used";
+    }
+    return this.res.status(this.status).json(data);
+  }
+}

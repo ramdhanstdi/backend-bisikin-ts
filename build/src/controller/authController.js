@@ -8,18 +8,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const standardResponse_1 = __importDefault(require("../helpers/standardResponse"));
-const auth_1 = require("../models/auth");
+const standardResponse_1 = require("../helpers/standardResponse");
+const authModels_1 = require("../models/authModels");
 class AuthController {
     constructor() {
         this.register = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const result = yield (0, auth_1.register)(req.body);
-            console.log(result);
-            return new standardResponse_1.default(res, "Kanjut Badag", result, null).response();
+            const result = yield (0, authModels_1.register)(req.body);
+            if (result.error) {
+                return new standardResponse_1.ErrorRes(res, result.error, null, null, 404).response();
+            }
+            return new standardResponse_1.SuccessRes(res, result.success, "Success Create Account", null).response();
         });
     }
     detail(req, res) {

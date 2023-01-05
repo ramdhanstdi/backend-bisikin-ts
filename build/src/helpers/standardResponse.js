@@ -1,13 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class SuccessRes {
-    constructor(res, msg, results, pageInfo, status = 200) {
+exports.ErrorRes = exports.SuccessRes = void 0;
+class StandarResponse {
+    constructor(res, results, msg, pageInfo, status = 200) {
         this.res = res;
         this.msg = msg;
         this.results = results;
         this.pageInfo = pageInfo;
         this.status = status;
     }
+}
+class SuccessRes extends StandarResponse {
     response() {
         const data = {
             success: true,
@@ -21,4 +24,22 @@ class SuccessRes {
         return this.res.status(this.status).json(data);
     }
 }
-exports.default = SuccessRes;
+exports.SuccessRes = SuccessRes;
+class ErrorRes extends StandarResponse {
+    response() {
+        const data = {
+            success: false,
+            msg: this.msg,
+        };
+        if (this.results.code === "P2002" &&
+            this.results.meta.target[0] === "email") {
+            data.msg = "Email already registered";
+        }
+        if (this.results.code === "P2002" &&
+            this.results.meta.target[0] === "username") {
+            data.msg = "Username already used";
+        }
+        return this.res.status(this.status).json(data);
+    }
+}
+exports.ErrorRes = ErrorRes;
