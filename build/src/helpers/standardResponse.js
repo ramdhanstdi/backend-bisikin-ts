@@ -39,7 +39,7 @@ class ErrorRes extends StandarResponse {
             this.results.meta.target[0] === "username") {
             data.msg = "Username already used";
         }
-        return this.res.status(this.status).json(data);
+        return this.res.status((this.status = 400)).json(data);
     }
 }
 exports.ErrorRes = ErrorRes;

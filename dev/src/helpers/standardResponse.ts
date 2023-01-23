@@ -57,6 +57,6 @@ export class ErrorRes extends StandarResponse {
     ) {
       data.msg = "Username already used";
     }
-    return this.res.status(this.status).json(data);
+    return this.res.status((this.status = 400)).json(data);
   }
 }

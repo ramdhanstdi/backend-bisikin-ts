@@ -10,13 +10,7 @@ class AuthRouter extends BaseRoute {
       Validation.validation,
       AuthController.register
     );
-    this.router.post(
-      "/login",
-      userSchema[0],
-      userSchema[1],
-      AuthController.create
-    );
-    this.router.delete("/delete", AuthController.delete);
+    this.router.post("/login", AuthController.login);
   }
 }
 
