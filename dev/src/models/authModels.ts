@@ -35,6 +35,34 @@ class AuthModels {
       return this.results;
     }
   };
+
+  public static activation = async (data: any): Promise<object> => {
+    try {
+      const user = await prisma.users.updateMany({
+        where: { AND: [{ email: data.email }, { otp: data.otp }] },
+        data: { isActive: true },
+      });
+      this.results.success = user;
+      return this.results;
+    } catch (error) {
+      this.results.error = error;
+      return this.results;
+    }
+  };
+
+  public static resetOtp = async (data: any): Promise<object> => {
+    try {
+      const user = await prisma.users.updateMany({
+        where: { email: data.email },
+        data: { otp: data.otp },
+      });
+      this.results.success = user;
+      return this.results;
+    } catch (error) {
+      this.results.error = error;
+      return this.results;
+    }
+  };
 }
 
 export default AuthModels;

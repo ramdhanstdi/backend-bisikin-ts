@@ -7,15 +7,18 @@ import mailer from "../mailers/mailer";
 class AuthController {
   //Register new Account
   register = async (req: Request, res: Response): Promise<Response> => {
-    const result: any = await AuthModels.register(req.body);
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    const result: any = await AuthModels.register({ ...req.body, otp });
     if (result.error) {
       return new ErrorRes(res, result.error, null, null, 404).response();
     }
+    mailer.sendMail(otp, "login", req.body.email);
     return new SuccessRes(
       res,
-      result.success,
-      "Success Create Account",
-      null
+      null,
+      "Check Your Email to activating your account",
+      null,
+      200
     ).response();
   };
 
@@ -32,38 +35,64 @@ class AuthController {
       return new SuccessRes(res, null, "User not found", null, 403).response();
     } else {
       const user = result.success[0];
-      if (!user.isActive) {
-        const numOTP = Math.floor(100000 + Math.random() * 900000);
-        mailer.sendMail(numOTP, "login", user.email);
-        return new SuccessRes(
-          res,
-          null,
-          "Check Your Email to Got OTP",
-          null,
-          403
-        ).response();
-      }
       // Compare password to login
       bcrypt
         .compare(req.body.password, user.password)
         .then((cpres) => {
           if (cpres) {
-            const token = jwt.sign(
-              { id: user.id },
-              process.env.APP_KEY || "secret"
-            );
-            return new SuccessRes(res, token, "Login Success", null).response();
+            if (!user.isActive) {
+              const numOTP = Math.floor(100000 + Math.random() * 900000);
+              AuthModels.resetOtp({ user: user.email, otp: numOTP });
+              mailer.sendMail(numOTP, "login", user.email);
+              return new SuccessRes(
+                res,
+                null,
+                "Check Your Email to activating your account",
+                null,
+                403
+              ).response();
+            } else {
+              const token = jwt.sign(
+                { id: user.id, status: user.isActive },
+                process.env.APP_KEY || "secret"
+              );
+              return new SuccessRes(
+                res,
+                token,
+                "Login Success",
+                null
+              ).response();
+            }
           }
         })
         .catch((error) => {
           return new SuccessRes(
             res,
             error,
-            "Wrong Password",
+            "Wrong email or password",
             null,
             403
           ).response();
         });
+    }
+  };
+
+  // Activation Account with OTP
+  activationAccount = async (
+    req: Request,
+    res: Response
+  ): Promise<Response> => {
+    const result: any = await AuthModels.activation(req.body);
+    if (result.error) {
+      return new ErrorRes(res, result.error, null, null, 403).response();
+    } else {
+      return new SuccessRes(
+        res,
+        result,
+        "Your account is now active",
+        null,
+        200
+      ).response();
     }
   };
 }

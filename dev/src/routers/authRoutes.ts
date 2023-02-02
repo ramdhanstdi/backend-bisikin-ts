@@ -11,6 +11,7 @@ class AuthRouter extends BaseRoute {
       AuthController.register
     );
     this.router.post("/login", AuthController.login);
+    this.router.post("/activation", AuthController.activationAccount);
   }
 }
 
