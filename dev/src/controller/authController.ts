@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { ErrorRes, SuccessRes } from "../helpers/standardResponse";
+import { IResult } from "./controllerInterface";
 import AuthModels from "../models/authModels";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -8,7 +9,7 @@ class AuthController {
   //Register new Account
   register = async (req: Request, res: Response): Promise<Response> => {
     const otp = Math.floor(100000 + Math.random() * 900000);
-    const result: any = await AuthModels.register({ ...req.body, otp });
+    const result: IResult = await AuthModels.register({ ...req.body, otp });
     if (result.error) {
       return new ErrorRes(res, result.error, null, null, 404).response();
     }
@@ -27,11 +28,11 @@ class AuthController {
     req: Request,
     res: Response
   ): Promise<Response | undefined> => {
-    const result: any = await AuthModels.login(req.body);
+    const result: IResult = await AuthModels.login(req.body);
     //checking phase user is available or not
     if (result.error) {
       return new ErrorRes(res, result.error, null, null, 403).response();
-    } else if (result.success == null) {
+    } else if (result.success.length < 1) {
       return new SuccessRes(res, null, "User not found", null, 403).response();
     } else {
       const user = result.success[0];
@@ -82,13 +83,15 @@ class AuthController {
     req: Request,
     res: Response
   ): Promise<Response> => {
-    const result: any = await AuthModels.activation(req.body);
+    const result: IResult = await AuthModels.activation(req.body);
     if (result.error) {
       return new ErrorRes(res, result.error, null, null, 403).response();
+    } else if (result.success.count < 1) {
+      return new SuccessRes(res, null, "User not found", null, 403).response();
     } else {
       return new SuccessRes(
         res,
-        result,
+        result.success,
         "Your account is now active",
         null,
         200

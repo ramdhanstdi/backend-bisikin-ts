@@ -6,16 +6,16 @@ class AuthModels {
     success: "",
     error: "",
   };
-  public static register = async (data: any): Promise<object> => {
+  public static register = async (data: any): Promise<IModels> => {
     try {
       const user = await prisma.users.create({
         data,
       });
-      const profile = await prisma.profile.create({
+      const success = await prisma.profile.create({
         data: { user_id: user.id, username: user.username, email: user.email },
       });
 
-      this.results.success = profile;
+      this.results.success = success;
       return this.results;
     } catch (error: any) {
       this.results.error = error;
@@ -23,7 +23,7 @@ class AuthModels {
     }
   };
 
-  public static login = async (data: any): Promise<object> => {
+  public static login = async (data: any): Promise<IModels> => {
     try {
       const user = await prisma.users.findMany({
         where: { OR: [{ email: data.email }, { username: data.username }] },
@@ -36,7 +36,7 @@ class AuthModels {
     }
   };
 
-  public static activation = async (data: any): Promise<object> => {
+  public static activation = async (data: any): Promise<IModels> => {
     try {
       const user = await prisma.users.updateMany({
         where: { AND: [{ email: data.email }, { otp: data.otp }] },
@@ -50,7 +50,7 @@ class AuthModels {
     }
   };
 
-  public static resetOtp = async (data: any): Promise<object> => {
+  public static resetOtp = async (data: any): Promise<IModels> => {
     try {
       const user = await prisma.users.updateMany({
         where: { email: data.email },

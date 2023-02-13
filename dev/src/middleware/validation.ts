@@ -16,7 +16,7 @@ export default class Validation {
         errors.array(),
         "Error Accured",
         null,
-        404
+        400
       ).response();
     }
     next();
